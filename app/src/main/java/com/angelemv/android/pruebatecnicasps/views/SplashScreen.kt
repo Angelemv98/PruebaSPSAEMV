@@ -3,7 +3,9 @@ package com.angelemv.android.pruebatecnicasps.views
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,7 +26,7 @@ import kotlinx.coroutines.delay
 fun SplashScreen(nav: NavHostController) {
 
     LaunchedEffect(key1 = true) {
-        delay(5000)
+        delay(3000)
         nav.popBackStack()
         nav.navigate(AppScreens.MainScreen.route)
     }
@@ -39,10 +41,11 @@ fun Splash() {
         verticalArrangement = Arrangement.Center
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_splashscreen),
+            painter = painterResource(id = R.drawable.ic_book),
             contentDescription = "App Logo",
-            modifier = Modifier.size(120.dp)
+            modifier = Modifier.size(180.dp)
         )
+        Spacer(modifier = Modifier.height(46.dp))
         Text(
             "Morales Varela Angel Ernesto",
             fontSize = 30.sp,

@@ -49,22 +49,24 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun fetchUsers() {
         viewModelScope.launch {
-            val fetchedUsers = api()
-            if (fetchedUsers.isNotEmpty()) {
-                val userEntities = fetchedUsers.map { user ->
-                    UserEntity(
-                        id = user.id,
-                        first_name = user.first_name,
-                        last_name = user.last_name,
-                        email = user.email,
-                        phone = "",
-                        avatar = user.avatar
-                    )
+            if (!hasDataBeenLoaded()) {
+                val fetchedUsers = api()
+                if (fetchedUsers.isNotEmpty()) {
+                    val userEntities = fetchedUsers.map { user ->
+                        UserEntity(
+                            id = user.id,
+                            first_name = user.first_name,
+                            last_name = user.last_name,
+                            email = user.email,
+                            phone = "",
+                            avatar = user.avatar
+                        )
+                    }
+                    withContext(Dispatchers.IO) {
+                        userDao.insertUsers(userEntities)
+                    }
+                    setDataLoaded()
                 }
-                withContext(Dispatchers.IO) {
-                    userDao.insertUsers(userEntities)
-                }
-                setDataLoaded()
             }
             _users.value = withContext(Dispatchers.IO) { userDao.getUsers() }
         }
