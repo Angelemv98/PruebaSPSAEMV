@@ -1,9 +1,7 @@
 package com.angelemv.android.pruebatecnicasps.views
 
 import android.app.Activity
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.BackHandler
-import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
@@ -19,21 +17,20 @@ import androidx.compose.material3.Icon
 import com.angelemv.android.pruebatecnicasps.R
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -76,22 +73,33 @@ fun MainScreen(navController: NavController, mainViewModel: MainViewModel = view
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        if (users.isEmpty()) {
-            Column(
+        Column(modifier = Modifier.fillMaxSize().
+        padding(top = 64.dp)) {
+            Text(
+                text = "Lista de Usuarios",
+                fontSize = 24.sp,
                 modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
+            if (users.isEmpty()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 12.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text("No hay usuarios.")
+                }
+            } else {
+                LazyColumn(modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 64.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text("No hay usuarios.")
-            }
-        } else {
-            LazyColumn(modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 64.dp)) {
-                items(users) { user ->
-                    UserItem(user, navController)
+                    .padding(top = 12.dp)) {
+                    items(users) { user ->
+                        UserItem(user, navController)
+                    }
                 }
             }
         }
