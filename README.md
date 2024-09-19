@@ -23,3 +23,6 @@ Sigue estos pasos para configurar el proyecto en tu entorno local:
 ## Recomendación
 - Tener una conexión estable al abrir la aplicación por primera vez, esto ya que se descarga la información inicial
 - Tener una conexión a internet constante para la carga de imagenes de la lista de contactos
+
+## APK Incluido
+Como puedes observar el apk esta en los archivos, mas especifico en la carpeta "APK" 
