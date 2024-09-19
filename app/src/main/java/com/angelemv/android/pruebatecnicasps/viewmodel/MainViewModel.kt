@@ -48,6 +48,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun addUser(user: UserEntity) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                userDao.insertUsers(listOf(user))
+            }
+            fetchUsers()
+        }
+    }
     private suspend fun api(): List<User> {
         return try {
             val response = apiService.getUsers()
