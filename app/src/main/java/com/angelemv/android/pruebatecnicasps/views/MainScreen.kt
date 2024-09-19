@@ -22,7 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import com.angelemv.android.pruebatecnicasps.model.data.User
+import com.angelemv.android.pruebatecnicasps.model.data.UserEntity
 import com.angelemv.android.pruebatecnicasps.model.interfaces.RetrofitInstance.apiService
 import com.angelemv.android.pruebatecnicasps.ui.theme.PruebaTecnicaSPSTheme
 import com.angelemv.android.pruebatecnicasps.viewmodel.MainViewModel
@@ -30,20 +30,16 @@ import com.angelemv.android.pruebatecnicasps.viewmodel.MainViewModel
 @Composable
 fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
     val users by mainViewModel.users.collectAsState()
-
     if (users.isEmpty()) {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text("Cargando usuarios...")
+            Text("No hay usuarios.")
         }
     } else {
-        LazyColumn(modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 32.dp)
-        ) {
+        LazyColumn(modifier = Modifier.fillMaxSize().padding(top = 32.dp)) {
             items(users) { user ->
                 UserItem(user)
             }
@@ -52,7 +48,7 @@ fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
 }
 
 @Composable
-fun UserItem(user: User) {
+fun UserItem(user: UserEntity) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -62,9 +58,7 @@ fun UserItem(user: User) {
         AsyncImage(
             model = user.avatar,
             contentDescription = "Avatar de ${user.first_name}",
-            modifier = Modifier
-                .size(50.dp)
-                .clip(CircleShape)
+            modifier = Modifier.size(50.dp).clip(CircleShape)
         )
         Spacer(modifier = Modifier.width(16.dp))
         Column {
