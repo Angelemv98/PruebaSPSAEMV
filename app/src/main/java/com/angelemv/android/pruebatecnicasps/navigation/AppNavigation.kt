@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.angelemv.android.pruebatecnicasps.views.AddNewUserScreen
+import com.angelemv.android.pruebatecnicasps.views.EditUser
 import com.angelemv.android.pruebatecnicasps.views.MainScreen
 import com.angelemv.android.pruebatecnicasps.views.SplashScreen
 
@@ -21,6 +22,10 @@ fun AppNavigation() {
         }
         composable(AppScreens.AddNewUser.route) {
             AddNewUserScreen(navController, viewModel())
+        }
+        composable("${AppScreens.EditUser.route}/{userId}") { backStackEntry ->
+            val userId = backStackEntry.arguments?.getString("userId")?.toInt() ?: 0
+            EditUser(userId, navController, viewModel())
         }
     }
 }

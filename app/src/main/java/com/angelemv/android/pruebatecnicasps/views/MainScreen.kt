@@ -1,21 +1,36 @@
 package com.angelemv.android.pruebatecnicasps.views
+
+import android.app.Activity
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import com.angelemv.android.pruebatecnicasps.R
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,22 +46,52 @@ import com.angelemv.android.pruebatecnicasps.viewmodel.MainViewModel
 @Composable
 fun MainScreen(navController: NavController, mainViewModel: MainViewModel = viewModel()) {
     val users by mainViewModel.users.collectAsState()
+    val context = LocalContext.current
+    val backPressed = remember { mutableStateOf(false) }
+
+    BackHandler {
+        backPressed.value = true
+    }
+
+    if (backPressed.value) {
+        AlertDialog(
+            onDismissRequest = { backPressed.value = false },
+            title = { Text("Confirmación") },
+            text = { Text("¿Estás seguro de que quieres salir?") },
+            confirmButton = {
+                Button(onClick = {
+                    (context as? Activity)?.finish()
+                }) {
+                    Text("Salir")
+                }
+            },
+            dismissButton = {
+                Button(onClick = {
+                    backPressed.value = false
+                }) {
+                    Text("Cancelar")
+                }
+            }
+        )
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         if (users.isEmpty()) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 32.dp),
+                    .padding(top = 64.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
                 Text("No hay usuarios.")
             }
         } else {
-            LazyColumn(modifier = Modifier.fillMaxSize().padding(top = 32.dp)) {
+            LazyColumn(modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 64.dp)) {
                 items(users) { user ->
-                    UserItem(user)
+                    UserItem(user, navController)
                 }
             }
         }
@@ -66,20 +111,29 @@ fun MainScreen(navController: NavController, mainViewModel: MainViewModel = view
 }
 
 @Composable
-fun UserItem(user: UserEntity) {
+fun UserItem(user: UserEntity, navController: NavController) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(8.dp)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onLongPress = {
+                        navController.navigate("${AppScreens.EditUser.route}/${user.id}")
+                    }
+                )
+            },
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (user.avatar?.isNotEmpty() == true && user.avatar != "null") {
-        AsyncImage(
-            model = user.avatar,
-            contentDescription = "Avatar de ${user.first_name}",
-            modifier = Modifier.size(50.dp).clip(CircleShape))
-        }
-        else{
+            AsyncImage(
+                model = user.avatar,
+                contentDescription = "Avatar de ${user.first_name}",
+                modifier = Modifier
+                    .size(50.dp)
+                    .clip(CircleShape)
+            )
+        } else {
             Image(
                 painter = painterResource(id = R.drawable.ic_no_image),
                 contentDescription = "Imagen predeterminada",
@@ -97,6 +151,7 @@ fun UserItem(user: UserEntity) {
         }
     }
 }
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
