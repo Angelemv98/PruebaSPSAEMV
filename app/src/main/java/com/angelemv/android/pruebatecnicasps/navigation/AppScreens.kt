@@ -4,4 +4,5 @@ sealed class AppScreens ( val route : String ) {
     object SplashScreen : AppScreens( "SplashScreen" )
     object MainScreen : AppScreens( "MainScreen" )
     object AddNewUser: AppScreens("AddNewUser")
+    object EditUser: AppScreens("EditUser")
 }
