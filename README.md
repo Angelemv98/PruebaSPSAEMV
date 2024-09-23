@@ -1,7 +1,7 @@
 # Prueba SPS de AEMV
 
 ## Descripción
-PruebaSPSAEMV es una aplicación desarrollada para que sea un gestor de contactos. El proyecto está construido utilizando jetpack compose y kotlin y sigue el patrón de arquitectura MVVM/MVP, etc.
+PruebaSPSAEMV es una aplicación desarrollada para que sea un gestor de contactos. El proyecto está construido utilizando jetpack compose y kotlin y sigue el patrón de arquitectura MVVM/MVP
 
 ## Requisitos
 Antes de comenzar, asegúrate de tener instalado lo siguiente:
